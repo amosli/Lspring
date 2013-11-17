@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans-3.2.xsd">
+	<!-- 给组件注入一个可依赖的对象 -->
+	<!-- <bean id="hello" class="com.lspring.hello.HelloImplcn"> <property name="msg"> 
+		<value>hi,all</value> </property> </bean> -->
+	<!-- 配置主板Bean -->
+	<!-- <bean id="myboard" class="com.lspring.computer.AUSUBoard"></bean> -->
+	<!-- 配置computer Bean -->
+	<!-- <bean id="computer" class="com.lspring.computer.Computer"> <property 
+		name="mainboard" ref="myboard"></property> </bean> -->
+
+	<bean id="p1" class="com.lspring.springIoc.Person"></bean>
+	<!-- <bean id="p3" name="p22" class="com.lspring.springIoc.Person"></bean>
+	<alias name="p3" alias="p4"/>
+	
+	<bean name="n1" class="com.lspring.springIoc.Person"></bean>
+	<bean class="com.lspring.springIoc.Person"></bean>
+	<bean class="com.lspring.springIoc.Person"></bean> -->
+
+</beans>

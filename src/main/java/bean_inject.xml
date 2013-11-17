@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans-3.2.xsd">
+
+	<!-- 使用setter注入 -->
+	<bean id="p1" class="com.lspring.springIoc.Person">
+		<property name="age" value="18"></property>
+		<property name="name" value="TOM"></property>
+	</bean>
+	<!-- 构造子注入 -->
+	<bean id="p2" class="com.lspring.springIoc.Person">
+		<constructor-arg value="20">
+		</constructor-arg>
+		<constructor-arg value="Jerry"></constructor-arg>
+	</bean>
+	<!-- 对于 一些有歧义的可能有几个构造函数与下面的参数匹配时，可以通过指定type进行区分 -->
+	<bean id="p3" class="com.lspring.springIoc.Person">
+		<constructor-arg index="1" type="java.lang.Integer"
+			value="20">
+		</constructor-arg>
+		<constructor-arg index="0" value="33"></constructor-arg>
+	</bean>
+</beans>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+         ">
+	<bean id="name" class="java.lang.String">
+		<constructor-arg value="Sunny"></constructor-arg>
+	</bean>
+	<bean id="parent" class="com.lspring.springIoc.Person">
+		<constructor-arg ref="name"></constructor-arg>
+	</bean>
+	<!-- 使用手动装配注入 name -->
+	<bean id="p1" class="com.lspring.springIoc.Person">
+		<!-- <property name="name" value="Sun"></property> -->
+		<property name="parent" ref="parent"></property>
+	</bean>
+	<!-- 使用自动装配注入 -->
+	<bean id="p21" class="com.lspring.springIoc.Person" autowire="byName">
+	</bean>
+</beans>
