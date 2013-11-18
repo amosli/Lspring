@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans-3.2.xsd">
+	<bean id="person_c" class="com.lspring.step2.Person">
+		<constructor-arg>
+			<value>Tom</value>
+		</constructor-arg>
+		<constructor-arg value="22"></constructor-arg>
+		<property name="parent">
+			<bean class="com.lspring.step2.Person">
+				<constructor-arg value="Jerry"></constructor-arg>
+				<constructor-arg>
+					<value>33</value>
+				</constructor-arg>
+			</bean>
+		</property>
+	</bean>
+
+	<bean id="person" class="com.lspring.step2.Person">
+		<property name="name" value="liyy"></property>
+		<!-- property元素中的内容叫属性值，会自动把value描述的值转换成对应属性的类型 -->
+		<property name="age">
+			<value>30</value>
+		</property>
+		<property name="tel">
+			<value>ABCD</value>
+		</property>
+		<!-- 也可以使用value装配一些Spring支持的类型 -->
+		<property name="homePage">
+			<value>http://google.com</value>
+		</property>
+		<!-- 1. <property name="parent" ref="person_c"></property>=2. <property 
+			name="parent"><ref bean="person_c"/></property> -->
+		<!--ref引用其它的bean,local表示引用本容器中的bean,parent表示引用父容器中的某个bean,bean表示先在当前容器中找，找不到再到父容器中找 -->
+		<property name="parent">
+			<ref bean="person_c"></ref>
+		</property>
+		<!-- 装配数组 -->
+		<property name="favs">
+			<array>
+				<value>足球</value>
+				<value>篮球</value>
+				<value>排球</value>
+			</array>
+		</property>
+		<!-- 装配list集合 -->
+		<property name="school">
+			<list>
+				<value>中华第一小学</value>
+				<value>中华第一高中</value>
+				<value>中华第一大学</value>
+			</list>
+		</property>
+		<!-- 装配set集合 -->
+		<property name="cities">
+			<set>
+				<value>shanghai</value>
+				<value>shanghai</value>
+				<value>shanghai</value>
+			</set>
+		</property>
+		<!-- 装配Map -->
+		<property name="scores">
+			<map>
+				<entry key="语文" value="50"></entry>
+				<entry key="外文" value="30"></entry>
+				<!-- 也可以使用key-ref,和value-ref来指向其他的bean -->
+			</map>
+		</property>
+		<!-- 装配属性类型 -->
+		<!-- <property name="properties"> <props> <prop key="qq">1213343</prop> 
+			<prop key="msn">kkk@qqq.com</prop> </props> </property> -->
+		<!-- 在value中直接使用值对作为属性内容 -->
+		<property name="properties">
+			<value>
+				qq=133234
+				msn=1312@dfjk.com
+			</value>
+		</property>
+	</bean>
+	<bean id="person_null" class="com.lspring.step2.Person">
+		<property name="name" value="小哥李"></property>
+		<property name="age">
+			<!-- 使用nul标签来指定空值。 -->
+			<null></null>
+		</property>
+	</bean>
+</beans>
