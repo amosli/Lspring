@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
-import java.util.Vector;
 
 public class Person {
 	private String name;
@@ -14,7 +13,7 @@ public class Person {
 	private String tel;
 	private Person parent;
 	private String[] favs;
-	private List<String> school = new Vector();
+	private List<String> school;
 	private Set<String> cities;
 	private Properties properties;
 	
