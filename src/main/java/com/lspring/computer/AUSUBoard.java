@@ -4,6 +4,8 @@ public class AUSUBoard implements Mainboard {
 	private boolean power;
 	public String getName() {
 		return "华硕主板!";
+
+
 	}
 
 	public String getPrice() {
