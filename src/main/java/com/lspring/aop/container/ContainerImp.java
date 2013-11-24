@@ -1,9 +1,11 @@
-package com.lspring.ioc;
+package com.lspring.aop.container;
 
 import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
+import java.lang.reflect.Proxy;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
@@ -15,12 +17,78 @@ public class ContainerImp implements Container {
 		// 初始化容器,把各个业务组件先进行初始化
 		try {
 			init();
-			 injectBySetter();
-//			injectByField();
+			injectBySetter();
+			// injectByField();
+			aop();
 			// 依赖注入
 		} catch (Exception e) {
-		e.printStackTrace();
+			e.printStackTrace();
 		}
+
+	}
+	
+	public void aop() throws Exception {
+		// 读到配置信息
+		Properties properties = new Properties();
+		properties.load(ContainerImp.class.getClassLoader().getResourceAsStream("aop.properties"));
+		for (Object item : properties.keySet()) {
+			final String key = item.toString();
+			// personDao.before=security.checkPermison,writelog.writeBeforeLog
+			// key=personDao.before
+			// value=security.checkPermison,writelog.writeBeforeLog
+			System.err.println("key:" + key);
+			String value = properties.getProperty(key);
+			// 获得beanName
+			String beanName = key.substring(0, key.indexOf("."));
+			// 得到要创建代理的真实对象
+			String values[] = value.split(",");
+			for (final String vs : values) {
+				// vs = security.checkPermison
+				// 给bean创建一个代理
+				// 检测bean有没有实现接口
+				final Object bean = getBean(beanName);
+				if (bean.getClass().getInterfaces().length > 0) {
+					// 使用jdk动态代理来创建
+					Object proxyBean = Proxy.newProxyInstance(this.getClass().getClassLoader(), bean.getClass().getInterfaces(), new InvocationHandler() {
+						public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+							// 获得切面bean,及切面方法
+							// vs = security.checkPermison
+							String aspectBeanName = vs.substring(0, vs.indexOf("."));
+							String aspectMethodName = vs.substring(vs.indexOf(".") + 1);
+							Object aspectBean = getBean(aspectBeanName);
+							// 找到一个public
+							// 方法，而且只带一个Method类型参数，并且名称是aspectMethodName的方法
+							Method aspectMethod = aspectBean.getClass().getMethod(aspectMethodName, Method.class);
+							if (key.indexOf(".before") > 0) {
+								// 执行切面上的aspectMethod方法
+								aspectMethod.invoke(aspectBean, method);
+							}
+							// 1.先调用真实对象的方法
+							Object result = method.invoke(bean, args);
+
+							if (key.contains("after")) {
+								aspectMethod.invoke(aspectBean, method);
+							}
+
+							return result;
+						}
+					});
+					// 把代理bean保存到容器中
+					beans.put(beanName, proxyBean);
+				} else {
+					// 使用其它的技术来创建代理
+				}
+
+			}
+		}
+		// personDao=com.lspring.aop.PesonDaoImpl
+		// 得到容器中personDao的bean
+		// 创建一个personDao的这个bean代理对象
+		// InvocationHandler对象的invoke方法中：
+		// 1.先调用真实对象的方法
+		// 2.调用writeLogAspect这个切面的bean的writeAfeterLog方法
+		// 3.返回return
+		// 把代理对象返回存到容器中
 
 	}
 
@@ -37,7 +105,7 @@ public class ContainerImp implements Container {
 		// 得类名，newInstance()
 		// 放置到beans这个缓存
 		Properties properties = new Properties();
-		properties.load(ContainerImp.class.getClassLoader().getResourceAsStream("beans.properties"));
+		properties.load(ContainerImp.class.getClassLoader().getResourceAsStream("beans_aop.properties"));
 		for (Object key : properties.keySet()) {
 			if (key.toString().indexOf(".") < 0) {
 				// properties.get(key);
@@ -61,7 +129,7 @@ public class ContainerImp implements Container {
 		// 扫描配置文件，发起是属于依赖注入的配置，就执行依赖注入
 
 		Properties properties = new Properties();
-		properties.load(ContainerImp.class.getClassLoader().getResourceAsStream("beans.properties"));
+		properties.load(ContainerImp.class.getClassLoader().getResourceAsStream("beans_aop.properties"));
 		for (Object o : properties.keySet()) {
 			String key = o.toString();
 			System.err.println("key:" + key);
@@ -105,7 +173,7 @@ public class ContainerImp implements Container {
 	public void injectByField() throws Exception {
 		// Properties properties = new Properties();
 		// properties.load(ContainerImp.class.getResourceAsStream("beans.properties"));
-//		beans.properties
+		// beans.properties
 		Properties properties = new Properties();
 		properties.load(ContainerImp.class.getClassLoader().getResourceAsStream("beans.properties"));
 
@@ -117,7 +185,7 @@ public class ContainerImp implements Container {
 				Object bean = getBean(beanName);
 				String pname = key.substring(key.indexOf(".") + 1);
 				Field[] declaredFields = bean.getClass().getDeclaredFields();
-				for(Field f:declaredFields){
+				for (Field f : declaredFields) {
 					System.err.println(f.getName());
 				}
 				Field field = bean.getClass().getDeclaredField(pname);
