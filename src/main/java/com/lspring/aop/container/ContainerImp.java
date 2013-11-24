@@ -42,11 +42,11 @@ public class ContainerImp implements Container {
 			String beanName = key.substring(0, key.indexOf("."));
 			// 得到要创建代理的真实对象
 			String values[] = value.split(",");
+			final Object bean = getBean(beanName);
 			for (final String vs : values) {
 				// vs = security.checkPermison
 				// 给bean创建一个代理
 				// 检测bean有没有实现接口
-				final Object bean = getBean(beanName);
 				if (bean.getClass().getInterfaces().length > 0) {
 					// 使用jdk动态代理来创建
 					Object proxyBean = Proxy.newProxyInstance(this.getClass().getClassLoader(), bean.getClass().getInterfaces(), new InvocationHandler() {
