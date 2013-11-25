@@ -1,4 +1,4 @@
-package com.lspring.aop;
+package com.lspring.SpringAOP;
 
 public interface IPersonDao {
 	void save(Person person);

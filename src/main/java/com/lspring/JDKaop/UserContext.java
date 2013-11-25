@@ -1,4 +1,4 @@
-package com.lspring.aop;
+package com.lspring.JDKaop;
 
 public class UserContext {
 	public static String getUser() {

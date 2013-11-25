@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+           http://www.springframework.org/schema/context
+           http://www.springframework.org/schema/context/spring-context-3.2.xsd
+           http://www.springframework.org/schema/aop
+            http://www.springframework.org/schema/aop/spring-aop-3.2.xsd
+           ">
+
+	<!-- 配置切面Bean -->
+	<bean id="sercurityAspectBean" class="com.lspring.SpringAOP.SecurityAspect"></bean>
+	<bean id="personDao" class="com.lspring.SpringAOP.PesonDaoImpl"></bean>
+	<!-- 配置aop -->
+<!-- 	<aop:config>
+ -->		<!-- 配置一个切面，切面会与一个切面Bean 进行关联 -->
+<!-- 		<aop:aspect ref="sercurityAspectBean"></aop:aspect>
+ -->		<!-- 配置切入点Pointcut -->
+<!-- 		<aop:pointcut expression="execution(* com.lspring.SpringAOP.IPersonDao(...)) "
+			id="Beforemethods"></aop:pointcut>
+ -->		<!-- 配置advice,在切入的什么位置做什么 -->
+		<!-- <aop:before method="checkPermison()"></aop:before>
+	</aop:config> -->
+	
+	<!-- 配置aop -->
+	<aop:config>
+		<!-- 配置一个切面，切面会与一个切面Bean进行关联 -->
+		<aop:aspect ref="sercurityAspectBean">
+			<!-- 配置切入点Pointcut -->
+			<aop:pointcut expression="execution(* com.lspring.SpringAOP.IPersonDao.*(..))"
+				id="peronsDaoMethods" />
+			<!-- 配置Advice，在切入点的什么位置做什么事情 pointcut-ref用来指定在什么切入点下面 执行通知 -->
+			<aop:before method="checkPermison" pointcut-ref="peronsDaoMethods" />
+		</aop:aspect>
+	</aop:config>
+
+</beans>

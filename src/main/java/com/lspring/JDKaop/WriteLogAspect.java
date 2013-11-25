@@ -1,4 +1,4 @@
-package com.lspring.aop;
+package com.lspring.JDKaop;
 
 import java.lang.reflect.Method;
 import java.util.Date;

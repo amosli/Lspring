@@ -1,9 +1,9 @@
-package com.lspring.aop;
+package com.lspring.JDKaop;
 
 import org.junit.Test;
 
-import com.lspring.aop.container.Container;
-import com.lspring.aop.container.ContainerImp;
+import com.lspring.JDKaop.container.Container;
+import com.lspring.JDKaop.container.ContainerImp;
 
 public class ClientTest {
 	@Test
